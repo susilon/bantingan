@@ -1,2 +1,2 @@
 # bantingan
-Core of Bantingan Framework
+Bantingan Framework Composer Repository
