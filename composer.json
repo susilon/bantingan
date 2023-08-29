@@ -25,5 +25,8 @@
         "phpmailer/phpmailer": "^6.2",
         "gregwar/captcha": "^1.2",
         "symfony/yaml": "^5.2"
-    }
+    },
+    "post-install-cmd": [
+        "Bantingan\\Installer::postInstall"
+    ]
 }
