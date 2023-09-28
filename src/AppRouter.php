@@ -75,7 +75,7 @@ sample route.config
   
 */
   		// Route Configuration
-	if (count(ROUTE_SETTINGS) > 0) {
+	if (ROUTE_SETTINGS != null && count(ROUTE_SETTINGS) > 0) {
 		foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
 			if (isset($routevalue["path"]) && isset($routevalue["controller"])) {
 				$path = $routevalue["path"];
