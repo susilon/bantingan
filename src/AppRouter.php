@@ -75,6 +75,7 @@ sample route.config
   
 */
   		// Route Configuration
+	if (count(ROUTE_SETTINGS) > 0) {
 		foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
 			if (isset($routevalue["path"]) && isset($routevalue["controller"])) {
 				$path = $routevalue["path"];
@@ -106,6 +107,8 @@ sample route.config
 				));
 			}
 		}
+	}
+		
 	
 		$routes->add('default', new Route('/{controller}/{action}/{parameters}',// path
 		    //array('controller' => 'home', 'action' => 'index', 'parameters' => null), // default values	
