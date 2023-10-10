@@ -191,7 +191,11 @@ class Controller
         $dataJson->message = $message;
         $dataJson->data = $data;
 
-		echo json_encode($dataJson, $option);
+		if ($option != null) {
+			echo json_encode($dataJson, $option);		
+		} else {
+			echo json_encode($dataJson);		
+		}		
 	}
 
 
@@ -210,14 +214,11 @@ class Controller
 		header('Content-Disposition: attachment; filename="'.$fileName.'.xlsx"');
 		header('Cache-Control: max-age=0');
 		$writer->save("php://output");
-		//exit();
 	}
 
 	// redirect to other action
 	protected function RedirectToAction($actionName, $controllerName=null, $objectParameter=null)
 	{
-		//$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-		//$baseUrl = $protocol.$_SERVER['HTTP_HOST']."/".APPLICATION_SETTINGS["BaseUrl"];
 		$newUrl =  $this->baseUrl."/".BANTINGAN_CONTROLLER_NAME."/".$actionName;
 		if (isset($controllerName)) {				
 			// override controller name if exists in parameter
@@ -226,15 +227,12 @@ class Controller
 				$newUrl =  $this->baseUrl."/".$controllerName."/".$actionName."/".$objectParameter;
 			}
 		}							
-		header("Location: ".$newUrl);
-		//throw new \Exception("save exit", 200); 
-		//echo $newUrl; 		
+		header("Location: ".$newUrl);		
 	}
 
 	protected function RedirectToURL($url)
 	{
-		header("Location: ".$url);
-		//throw new \Exception("save exit", 200);  
+		header("Location: ".$url); 
 	}
 
 	// return as  json
