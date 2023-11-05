@@ -170,6 +170,29 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot create object, table name is unknown.', 50);                   
     } 
 
+    private function findoneorcreate($parameterarray, $tablename=null)
+    {
+        if (!isset($tablename)) {
+            $tablename = $this->tablename;
+        }        
+        if (isset($tablename)) {     
+            $redbeans = null; 
+            if (count($parameterarray) > 0) {
+                foreach ($parameterarray as $key => $value) {
+                    $keys[] = $key."=?";
+                    $values[] = $value;
+                }
+                $keystring = implode(" and ", $keys);
+                $redbeans = $this->find($keystring, $values);                  
+            }       
+            if ($redbeans == null) {
+                $redbeans = $this->create();
+            }
+            return $redbeans;                
+        } 
+        throw new \Exception('Cannot create object, table name is unknown.', 50);                   
+    } 
+
     private function save($redbeansdata = null)
     {        
         if (isset($redbeansdata)) {                     
