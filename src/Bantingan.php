@@ -141,6 +141,7 @@ class Bantingan
 			$errorPage->viewBag->pageTitle = "Error ".$errorException->getCode();
 			$errorPage->viewBag->errorCode = $errorException->getCode();
 			$errorPage->viewBag->errorMessage = $errorException->getMessage();
+			$errorPage->viewBag->errorException = $errorException;
 
 			try {
 				$errorPage->Render($controllerName.$methodName);
