@@ -119,6 +119,9 @@ class Bantingan
 	        }  		
 			$this->closeDBConnection();	    
 		}
+		catch (\Throwable $err) { 
+			$this->errorHandler($err);
+		}
         catch(\Exception $err) {          	
         	$this->errorHandler($err);
         }
