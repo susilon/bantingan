@@ -26,6 +26,7 @@ class PageGenerator
 	public $contents;
 	public $baseUrl;
 	public $baseController;
+	public $namespace = "";
 
 	public function __construct()
 	{
@@ -42,7 +43,12 @@ class PageGenerator
 			$viewPathArg=$current_view_path . $this->viewHtml;
 		} 
 
-		$viewPath= APPLICATION_BASEPATH.'/'.APPLICATION_SETTINGS["Views"].'/'.$viewPathArg;	
+		$namespacepath = "";
+		if ($this->namespace != "") {
+			$namespacepath = $this->namespace."/";
+		}
+
+		$viewPath= APPLICATION_BASEPATH . '/'.APPLICATION_SETTINGS["Views"]."/$namespacepath$viewPathArg";		
 		
 		if	(file_exists($viewPath))	{
 			//If the file exists, call the smarty engine			

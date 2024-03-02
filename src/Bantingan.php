@@ -113,16 +113,17 @@ class Bantingan
 				$namespaceclass = $namespace."\\";
 			}
 
-			$controllerFile = __DIR__ . '/../'.				
+			$controllerFile = APPLICATION_BASEPATH . '/' .			
 				APPLICATION_SETTINGS["Controllers"].'/'.
 				$namespacepath.
 				ucfirst(BANTINGAN_CONTROLLER_NAME).'Controller.php';	
 			
 			if(file_exists($controllerFile)) {	 				
 				// requested controller file	
-				$controllerFunction = ucfirst(APPLICATION_SETTINGS["Controllers"])."\\".
+				$controllerFunction = ucfirst(CONTROLLER_NAMESPACE)."\\".
 					$namespaceclass.
 					ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME))."Controller";
+				
 				$controller = new $controllerFunction();
 				$controller->namespace = $namespace;
 

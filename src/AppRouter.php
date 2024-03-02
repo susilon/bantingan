@@ -77,10 +77,18 @@ sample route.config
   		// Route Configuration
 	if (ROUTE_SETTINGS != null && count(ROUTE_SETTINGS) > 0) {
 		foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
-			if (isset($routevalue["path"]) && isset($routevalue["controller"])) {
+			if (isset($routevalue["path"])) {
 				$path = $routevalue["path"];
 				$namespace = $routevalue["namespace"]??"";
+				
 				$controller = "home";
+				if (isset($routevalue["controller"])) {
+					// path with predefined action
+					$controller = $routevalue["controller"]; // set predefined action
+				} else {
+					$path .= "/{controller}"; // any action by url
+				}
+
 				$action = "index";
 				if (isset($routevalue["action"])) {
 					// path with predefined action
@@ -118,10 +126,12 @@ sample route.config
 					));
 				}
 
+				/*
 				$routes->add($key, new Route($path,// path with any parameter
 					array('controller' => $routevalue["controller"], 'action' => $action, 'parameters' => $parameters),
 					array('parameters'=>'.*') // requirements
 				));
+				*/
 			}
 		}
 	}

@@ -30,6 +30,8 @@ class Controller
 
 	public $baseUrl;
 
+	public $namespace;
+
 	public function __construct()
 	{
 		if (!isset($this->viewBag)) {
@@ -111,6 +113,7 @@ class Controller
 	{
 		$page = new PageGenerator;
 		$page->viewBag = $this->viewBag;
+		$page->namespace = $this->namespace;
 		return $page->Create($viewPathArg);		
 	}
 
@@ -118,7 +121,8 @@ class Controller
 	public function View($viewPathArg=null)
 	{
 		$page = new PageGenerator;
-		$page->viewBag = $this->viewBag;		
+		$page->viewBag = $this->viewBag;
+		$page->namespace = $this->namespace;		
 		$page->Render($viewPathArg);
 
 		return $this;		
