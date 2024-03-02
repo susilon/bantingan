@@ -60,6 +60,7 @@ class Controller
     			$this->isPOST = true;			
     		}
 
+			/*
 			switch(sizeof(BANTINGAN_PARAMETER))  {
 			// optimize for better performance if parameter are 5 or less			    
 			    case 0: $this->$method();
@@ -76,11 +77,21 @@ class Controller
 			    break;
 			    default:call_user_func_array($classFunction, BANTINGAN_PARAMETER);
 			    break;
-			}			
+			}	
+			*/		
 		//}
 		//catch(\Exception $ex)	{			
 		//	throw new \Exception($ex->getMessage(), 404);
 		//}
+	}
+
+	public function baseUrl() {
+		$this->basePath = __DIR__."/../";
+		$this->baseUrl = '//'.$_SERVER['HTTP_HOST'];
+		if (!empty(APPLICATION_SETTINGS["BaseUrl"])) {
+			$this->baseUrl .= '/'.APPLICATION_SETTINGS["BaseUrl"];
+		}
+		return $this->baseUrl;
 	}
 
 	// flash message, a one read message

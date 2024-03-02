@@ -102,6 +102,21 @@ sample route.config
 				}
 
 				$routes->add($key, new Route($path,// path with any parameter
+					array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters),
+					array('parameters'=>'.*') // requirements
+				));
+
+				if ($namespace != "") {
+					$routes->add($key."_base", new Route("/".strtolower($namespace)."/",
+						array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
+					));
+
+					$routes->add($key."_method", new Route("/".strtolower($namespace)."/{controller}/",
+						array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
+					));
+				}
+
+				$routes->add($key, new Route($path,// path with any parameter
 					array('controller' => $routevalue["controller"], 'action' => $action, 'parameters' => $parameters),
 					array('parameters'=>'.*') // requirements
 				));

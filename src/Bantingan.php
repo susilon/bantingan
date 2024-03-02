@@ -105,12 +105,55 @@ class Bantingan
 		}		
 
 		try {
-			// to dodge fatal error									
-			$controllerFile = APPLICATION_BASEPATH.'/'.APPLICATION_SETTINGS["Controllers"].'/'.ucfirst(BANTINGAN_CONTROLLER_NAME).'Controller.php';						
+			$namespace = isset($this->route["namespace"])?$this->route["namespace"]:"";
+			$namespacepath = "";
+			$namespaceclass = "";
+			if ($namespace != "") {
+				$namespacepath = $namespace."/";
+				$namespaceclass = $namespace."\\";
+			}
+
+			$controllerFile = __DIR__ . '/../'.				
+				APPLICATION_SETTINGS["Controllers"].'/'.
+				$namespacepath.
+				ucfirst(BANTINGAN_CONTROLLER_NAME).'Controller.php';	
+			
 			if(file_exists($controllerFile)) {	 				
-				// requested controller file										
-				$controllerFunction = ucfirst(CONTROLLER_NAMESPACE)."\\".ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME))."Controller";
-				new $controllerFunction();				
+				// requested controller file	
+				$controllerFunction = ucfirst(APPLICATION_SETTINGS["Controllers"])."\\".
+					$namespaceclass.
+					ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME))."Controller";
+				$controller = new $controllerFunction();
+				$controller->namespace = $namespace;
+
+				$classFunction = array($controller,BANTINGAN_ACTION_NAME);			
+				$method = 	BANTINGAN_ACTION_NAME;	
+
+				if (!method_exists($controller, BANTINGAN_ACTION_NAME)) {			
+					throw new \Exception('Method does not exists', 404);			
+				} else {				
+					$findmethod = new \ReflectionMethod($controller, BANTINGAN_ACTION_NAME);			
+					if ($findmethod->getNumberOfRequiredParameters() > sizeof(BANTINGAN_PARAMETER)) {
+						throw new \Exception('Arguments not valid', 404);
+					}
+				}
+				switch(sizeof(BANTINGAN_PARAMETER))  {
+				// optimize for better performance if parameter are 5 or less			    
+					case 0: $controller->$method();
+					break;
+					case 1: $controller->$method(BANTINGAN_PARAMETER[0]);
+					break;
+					case 2: $controller->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1]);
+					break;
+					case 3: $controller->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2]);
+					break;
+					case 4: $controller->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2], BANTINGAN_PARAMETER[3]);
+					break;
+					case 5: $controller->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2], BANTINGAN_PARAMETER[3], BANTINGAN_PARAMETER[4]);
+					break;
+					default:call_user_func_array($classFunction, BANTINGAN_PARAMETER);
+					break;
+				}				
 			} else {				
 	            throw new \Exception('Resources Not Found..', 404);					            
 	        }  		
