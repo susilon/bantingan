@@ -79,6 +79,8 @@ sample route.config
 		foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
 			if (isset($routevalue["path"]) && isset($routevalue["controller"])) {
 				$path = $routevalue["path"];
+				$namespace = $routevalue["namespace"]??"";
+				$controller = "home";
 				$action = "index";
 				if (isset($routevalue["action"])) {
 					// path with predefined action
