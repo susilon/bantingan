@@ -54,16 +54,13 @@ class Bantingan
 			$routeConfig = new AppRouter;
 			$this->route = $routeConfig->RouterStart();	
 			$this->Start($this->route);					
-		} catch (\Exception $err)
+		} 
+		catch (\Throwable $err) { 
+			$this->mainErrorHandler($err);
+		}
+		catch (\Exception $err)
 		{			
-			if (isset(APPLICATION_SETTINGS["ShowRoutingError"]) && APPLICATION_SETTINGS["ShowRoutingError"]) {
-				$err = new \Exception('Resources Not Found.', 404);	
-				$this->errorHandler($err);
-			} else {
-				$this->controllername = APPLICATION_SETTINGS["DefaultController"];//'Home';
-				$this->actionname = 'index';
-				$this->Start($this->route);	
-			}			
+			$this->mainErrorHandler($err);
 		}							
 	}
 
@@ -149,6 +146,9 @@ class Bantingan
 			try {
 				$errorPage->Render($controllerName.$methodName);
 			}
+			catch (\Throwable $err) { 
+				echo "Sorry, resources not found!<br>".$errorException->getMessage();
+			}
 			catch(\Exception $err) {          	
 				echo "Sorry, resources not found!<br>".$errorException->getMessage();
 			}
@@ -156,6 +156,18 @@ class Bantingan
 
 		$this->closeDBConnection();	
 	}	
+
+	private function mainErrorHandler($err)
+	{
+		if (isset(APPLICATION_SETTINGS["ShowRoutingError"]) && APPLICATION_SETTINGS["ShowRoutingError"]) {
+			$err = new \Exception('Resources Not Found.', 404);	
+			$this->errorHandler($err);
+		} else {
+			$this->controllername = APPLICATION_SETTINGS["DefaultController"];//'Home';
+			$this->actionname = 'index';
+			$this->Start($this->route);	
+		}	
+	}
 
 	private function closeDBConnection()
 	{

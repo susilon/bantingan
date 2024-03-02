@@ -250,9 +250,13 @@ class Model extends \RedBeanPHP\SimpleModel
 	            }            
 	            return isset($parameter)?R::getAll($query, $parameter):R::getAll($query);   
 	        }
-	        catch(Exception $exc)
+            catch (Throwable $err) 
+            { 
+				throw new Exception($err->getMessage(), 50);
+			}
+	        catch(Exception $err)
 	        {
-	            throw new Exception($exc->getMessage(), 50);            
+	            throw new Exception($err->getMessage(), 50);
 	        }
 	    } 
 
@@ -263,9 +267,13 @@ class Model extends \RedBeanPHP\SimpleModel
         try {                                    
             return isset($parameter)?R::getRow($query, $parameter):R::getRow($query);
         }
-        catch(Exception $exc)
+        catch (Throwable $err) 
+        { 
+            throw new Exception($err->getMessage(), 50);
+        }
+        catch(Exception $err)
         {
-            throw new Exception($exc->getMessage(), 50);            
+            throw new Exception($err->getMessage(), 50);            
         }
     }
 
@@ -273,9 +281,13 @@ class Model extends \RedBeanPHP\SimpleModel
         try {                        
             return isset($parameter)?R::getCell($query, $parameter):R::getCell($query);
         }
-        catch(Exception $exc)
+        catch (Throwable $err) 
+        { 
+            throw new Exception($err->getMessage(), 50);
+        }
+        catch(Exception $err)
         {
-            throw new Exception($exc->getMessage(), 50);            
+            throw new Exception($err->getMessage(), 50);            
         }
     }
 
@@ -283,9 +295,13 @@ class Model extends \RedBeanPHP\SimpleModel
         try {                                    
             return isset($parameter)?R::exec($query, $parameter):R::exec($query);
         }
-        catch(Exception $exc)
+        catch (Throwable $err) 
+        { 
+            throw new Exception($err->getMessage(), 50);
+        }
+        catch(Exception $err)
         {
-            throw new Exception($exc->getMessage(), 50);            
+            throw new Exception($err->getMessage(), 50);            
         }
     }    
 
