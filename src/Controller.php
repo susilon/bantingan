@@ -42,49 +42,24 @@ class Controller
 		if (!empty(APPLICATION_SETTINGS["BaseUrl"])) {
 			$this->baseUrl .= '/'.APPLICATION_SETTINGS["BaseUrl"];
 		}
+		
+		$classFunction = array($this,BANTINGAN_ACTION_NAME);			
+		$method = BANTINGAN_ACTION_NAME;	
 
-		//try	{
-			$classFunction = array($this,BANTINGAN_ACTION_NAME);			
-			$method = BANTINGAN_ACTION_NAME;	
-
-			if (!method_exists($this, BANTINGAN_ACTION_NAME)) {			
-				throw new \Exception('Method does not exists', 404);			
-			} else {				
-				$findmethod = new \ReflectionMethod($this, BANTINGAN_ACTION_NAME);			
-				if ($findmethod->getNumberOfRequiredParameters() > sizeof(BANTINGAN_PARAMETER)) {
-					throw new \Exception('Arguments not valid', 404);
-				}
+		if (!method_exists($this, BANTINGAN_ACTION_NAME)) {			
+			throw new \Exception('Method does not exists', 404);			
+		} else {				
+			$findmethod = new \ReflectionMethod($this, BANTINGAN_ACTION_NAME);			
+			if ($findmethod->getNumberOfRequiredParameters() > sizeof(BANTINGAN_PARAMETER)) {
+				throw new \Exception('Arguments not valid', 404);
 			}
+		}
 
-			if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    			$this->isGET = true;			
-    		} else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    			$this->isPOST = true;			
-    		}
-
-			/*
-			switch(sizeof(BANTINGAN_PARAMETER))  {
-			// optimize for better performance if parameter are 5 or less			    
-			    case 0: $this->$method();
-			    break;
-			    case 1: $this->$method(BANTINGAN_PARAMETER[0]);
-			    break;
-			    case 2: $this->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1]);
-			    break;
-			    case 3: $this->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2]);
-			    break;
-			    case 4: $this->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2], BANTINGAN_PARAMETER[3]);
-			    break;
-			    case 5: $this->$method(BANTINGAN_PARAMETER[0], BANTINGAN_PARAMETER[1], BANTINGAN_PARAMETER[2], BANTINGAN_PARAMETER[3], BANTINGAN_PARAMETER[4]);
-			    break;
-			    default:call_user_func_array($classFunction, BANTINGAN_PARAMETER);
-			    break;
-			}	
-			*/		
-		//}
-		//catch(\Exception $ex)	{			
-		//	throw new \Exception($ex->getMessage(), 404);
-		//}
+		if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$this->isGET = true;			
+		} else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$this->isPOST = true;			
+		}
 	}
 
 	public function baseUrl() {
@@ -109,29 +84,29 @@ class Controller
 	}
 
 	// return html
-	public function Page($viewPathArg=null)
+	public function page($viewPathArg=null)
 	{
 		$page = new PageGenerator;
 		$page->viewBag = $this->viewBag;
 		$page->namespace = $this->namespace;
-		return $page->Create($viewPathArg);		
+		return $page->create($viewPathArg);		
 	}
 
 	// stream html
-	public function View($viewPathArg=null)
+	public function view($viewPathArg=null)
 	{
 		$page = new PageGenerator;
 		$page->viewBag = $this->viewBag;
 		$page->namespace = $this->namespace;		
-		$page->Render($viewPathArg);
+		$page->render($viewPathArg);
 
 		return $this;		
 	}
 
 	// stream pdf
-	protected function DOMPDFView($viewPathArg = null)
+	protected function dompdfView($viewPathArg = null)
 	{		
-		$html = $this->Page($viewPathArg);
+		$html = $this->page($viewPathArg);
 			
 		// instantiate and use the dompdf class
 		$dompdf = new \Dompdf\Dompdf();
@@ -145,7 +120,7 @@ class Controller
 
 		$dompdf->render();
 
-		$dompdf = $this->dompPDFInjectPageCount($dompdf);
+		$dompdf = $this->dompdfInjectPageCount($dompdf);
 
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
 
@@ -153,9 +128,9 @@ class Controller
 	}
 
 	// file pdf download
-	protected function DOMPDFFile($viewPathArg = null)
+	protected function dompdfFile($viewPathArg = null)
 	{		
-		$html = $this->Page($viewPathArg);
+		$html = $this->page($viewPathArg);
 			
 		// instantiate and use the dompdf class
 		$dompdf = new \Dompdf\Dompdf();
@@ -169,7 +144,7 @@ class Controller
 
 		$dompdf->render();
 
-		$dompdf = $this->dompPDFInjectPageCount($dompdf);
+		$dompdf = $this->dompdfInjectPageCount($dompdf);
 
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
 
@@ -181,7 +156,7 @@ class Controller
 	 *
 	 * @param Dompdf $dompdf
 	 */
-	protected function dompPDFInjectPageCount(\Dompdf\Dompdf $dompdf)
+	protected function dompdfInjectPageCount(\Dompdf\Dompdf $dompdf)
 	{
 	    /** @var CPDF $canvas */
 	    $canvas = $dompdf->getCanvas();
@@ -197,7 +172,7 @@ class Controller
 	}
 
 	// standard Bantingan Json format
-	protected function JsonResponse($status, $message, $data, $option=null)
+	protected function jsonResponse($status, $message, $data, $option=null)
 	{
 		header('Content-Type: application/json');
 
@@ -215,11 +190,11 @@ class Controller
 
 
 	// file xls download
-	protected function XLSFile($viewPathArg = null)
+	protected function xlsFile($viewPathArg = null)
 	{
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
 
-		$html = $this->Page($viewPathArg);
+		$html = $this->page($viewPathArg);
 		$reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
 		$spreadsheet = $reader->loadFromString($html);
 		unset($reader);
@@ -232,7 +207,7 @@ class Controller
 	}
 
 	// redirect to other action
-	protected function RedirectToAction($actionName, $controllerName=null, $objectParameter=null)
+	protected function redirectToAction($actionName, $controllerName=null, $objectParameter=null)
 	{
 		$newUrl =  $this->baseUrl."/".BANTINGAN_CONTROLLER_NAME."/".$actionName;
 		if (isset($controllerName)) {				
@@ -245,19 +220,19 @@ class Controller
 		header("Location: ".$newUrl);		
 	}
 
-	protected function RedirectToURL($url)
+	protected function redirectToURL($url)
 	{
 		header("Location: ".$url); 
 	}
 
 	// return as  json
-	protected function Json($data, $option = 0)
+	protected function json($data, $option = 0)
 	{
 		header('Content-Type: application/json');
 		echo json_encode($data, $option);
 	}
 
-	protected function JsonGz($data, $option=null)
+	protected function jsonGz($data, $option=null)
 	{		
 		ob_start('ob_gzhandler');
 		header('Content-Type: text/plain');
@@ -265,7 +240,7 @@ class Controller
 		echo gzencode(json_encode($data, $option));
 	}
 
-	protected function CSVView($data, $withheader, $delimiter=null, $enclosure=null)
+	protected function csvView($data, $withheader, $delimiter=null, $enclosure=null)
 	{
 		$file = fopen('php://output', 'w');
 		
@@ -282,7 +257,7 @@ class Controller
 		fclose($file);
 	}
 
-	protected function CSVFile($data, $withheader, $filename, $delimiter=null, $enclosure=null)
+	protected function csvFile($data, $withheader, $filename, $delimiter=null, $enclosure=null)
 	{		
 		header('Content-Type: text/csv');
 		header('Content-Disposition: attachment; filename="'.$filename.'.csv"');

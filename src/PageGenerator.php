@@ -33,7 +33,7 @@ class PageGenerator
 		$this->viewBag = new \StdClass();
 	}
 
-	public function Create($viewPathArg)
+	public function create($viewPathArg)
 	{				
 		if (!$viewPathArg) {
 			// then sets the view according to the caller function, not the url controller path
@@ -78,8 +78,8 @@ class PageGenerator
 		return $this->contents;
 	}
 
-	public function Render($viewPathArg)
+	public function render($viewPathArg)
 	{	
-		echo $this->Create($viewPathArg);
+		echo $this->create($viewPathArg);
 	}
 }

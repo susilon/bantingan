@@ -110,7 +110,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot create object, table name is unknown.', 50);           
     } 
 
-    private function loadorcreate($id, $tablename = null)
+    private function loadOrCreate($id, $tablename = null)
     {                       
         if (!isset($tablename)) {
             $tablename = $this->tablename;
@@ -148,7 +148,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot find object, table name is unknown.', 50);                   
     } 
 
-    private function findlike($parameterarray, $tablename=null)
+    private function findLike($parameterarray, $tablename=null)
     {
         if (!isset($tablename)) {
             $tablename = $this->tablename;
@@ -159,7 +159,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot find object, table name is unknown.', 50);                   
     } 
 
-    private function findorcreate($parameterarray, $tablename=null)
+    private function findOrCreate($parameterarray, $tablename=null)
     {
         if (!isset($tablename)) {
             $tablename = $this->tablename;
@@ -170,7 +170,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot create object, table name is unknown.', 50);                   
     } 
 
-    private function findoneorcreate($parameterarray, $tablename=null)
+    private function findOneOrCreate($parameterarray, $tablename=null)
     {
         if (!isset($tablename)) {
             $tablename = $this->tablename;
@@ -201,7 +201,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot save data, object is empty.', 50);     
     }
 
-    private function saveall($redbeansdata = null)
+    private function saveAll($redbeansdata = null)
     {        
         if (isset($redbeansdata)) {                     
             return R::storeAll($redbeansdata); 
@@ -225,7 +225,7 @@ class Model extends \RedBeanPHP\SimpleModel
         throw new \Exception('Cannot delete data, object is empty.', 50);
     }
 
-    private function getall($query = null, $parameter = null) {  
+    private function getAll($query = null, $parameter = null) {  
     	if (isset($this->tablename)) {  
 	        try {
 	            if (!isset($query)) {
@@ -263,7 +263,7 @@ class Model extends \RedBeanPHP\SimpleModel
 	    throw new \Exception('Cannot get object, table name is unknown.', 50);
     }
 
-    private function getrow($query, $parameter=null) {           
+    private function getRow($query, $parameter=null) {           
         try {                                    
             return isset($parameter)?R::getRow($query, $parameter):R::getRow($query);
         }
@@ -277,7 +277,7 @@ class Model extends \RedBeanPHP\SimpleModel
         }
     }
 
-    private function getcell($query, $parameter=null) {    
+    private function getCell($query, $parameter=null) {    
         try {                        
             return isset($parameter)?R::getCell($query, $parameter):R::getCell($query);
         }
@@ -291,7 +291,7 @@ class Model extends \RedBeanPHP\SimpleModel
         }
     }
 
-    private function execsql($query, $parameter=null) {           
+    private function execSql($query, $parameter=null) {           
         try {                                    
             return isset($parameter)?R::exec($query, $parameter):R::exec($query);
         }
@@ -305,7 +305,7 @@ class Model extends \RedBeanPHP\SimpleModel
         }
     }    
 
-    private function getrowwithid($id) { 
+    private function getRowWithId($id) { 
         if (isset($this->tablename)) {
             return R::getRow("select * from $this->tablename where id = ?", [ $id ]);
         }           
@@ -319,7 +319,7 @@ class Model extends \RedBeanPHP\SimpleModel
         return R::inspect(strtolower($tablename));
     }
 
-    private function updatemodel($olddata, $newdata) {             
+    private function updateModel($olddata, $newdata) {             
         foreach ($newdata as $key => $value) {
             if ($key != "id") {
                 $olddata->$key = $newdata->$key;
@@ -345,19 +345,19 @@ class Model extends \RedBeanPHP\SimpleModel
         return R::transaction($function);
     }
 
-    private function begintrans() {
+    private function beginTrans() {
         R::begin();
     }
 
-    private function committrans() {
+    private function commitTrans() {
         R::commit();
     }
 
-    private function rollbacktrans() {
+    private function rollbackTrans() {
         R::rollback();
     }
 
-    private function changedcolumns($data) {
+    private function changedColumns($data) {
         $changedcolumn = [];
         foreach($data as $columnname => $columnvalue) {                    
             if ($data->hasChanged($columnname)) {
