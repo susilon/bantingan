@@ -29,6 +29,7 @@ class Controller
 	public $isPOST = false;
 
 	public $baseUrl;
+	public $basePath;
 
 	public $namespace;
 
