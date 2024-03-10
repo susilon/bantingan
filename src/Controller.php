@@ -210,12 +210,16 @@ class Controller
 	// redirect to other action
 	protected function redirectToAction($actionName, $controllerName=null, $objectParameter=null)
 	{
-		$newUrl =  $this->baseUrl."/".BANTINGAN_CONTROLLER_NAME."/".$actionName;
+		$namespacepath = "";
+		if ($this->namespace != "") {
+			$namespacepath = strtolower($this->namespace)."/";
+		}
+		$newUrl =  $this->baseUrl."/".$namespacepath.BANTINGAN_CONTROLLER_NAME."/".$actionName;
 		if (isset($controllerName)) {
 			// override controller name if exists in parameter
-			$newUrl =  $this->baseUrl."/".$controllerName."/".$actionName;
+			$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName;
 			if (isset($objectParameter)) {
-				$newUrl =  $this->baseUrl."/".$controllerName."/".$actionName."/".$objectParameter;
+				$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName."/".$objectParameter;
 			}
 		}
 		header("Location: ".$newUrl);
