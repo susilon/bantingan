@@ -183,10 +183,10 @@ class Model extends \RedBeanPHP\SimpleModel
                     $values[] = $value;
                 }
                 $keystring = implode(" and ", $keys);
-                $redbeans = $this->find($keystring, $values);                  
+                $redbeans = $this->find($keystring, $values, $tablename);                  
             }       
             if ($redbeans == null) {
-                $redbeans = $this->create();
+                $redbeans = $this->create($tablename);
             }
             return $redbeans;                
         } 
