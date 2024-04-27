@@ -32,6 +32,15 @@ class PageGenerator
 	{
 		$this->viewBag = new \StdClass();
 	}
+	
+	public function getSmarty()
+	{
+		if ($this->smarty == null) {
+			$this->smarty = new Smarty;
+		}
+
+		return $this->smarty;
+	}
 
 	public function create($viewPathArg)
 	{				
@@ -53,7 +62,7 @@ class PageGenerator
 		if	(file_exists($viewPath))	{
 			//If the file exists, call the smarty engine			
 			//include APPLICATION_SETTINGS["Smarty_Bootstrap_Path"].'bootstrap.php';
-			$this->smarty = new Smarty(); 
+			$this->smarty = $this->getSmarty();
 			$this->smarty->caching = 0;
 
 			// predefined variable, overrideable from controller
