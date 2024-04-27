@@ -33,6 +33,8 @@ class Controller
 
 	public $namespace;
 
+	public $smartyPlugin = [];
+
 	public function __construct()
 	{
 		if (!isset($this->viewBag)) {
@@ -88,6 +90,9 @@ class Controller
 	public function page($viewPathArg=null)
 	{
 		$page = new PageGenerator;
+		$smarty = $page->getSmarty();
+		$this->registerPlugin($smarty);
+
 		$page->viewBag = $this->viewBag;
 		$page->namespace = $this->namespace;
 		return $page->create($viewPathArg);		
@@ -97,6 +102,9 @@ class Controller
 	public function view($viewPathArg=null)
 	{
 		$page = new PageGenerator;
+		$smarty = $page->getSmarty();
+		$this->registerPlugin($smarty);
+
 		$page->viewBag = $this->viewBag;
 		$page->namespace = $this->namespace;		
 		$page->render($viewPathArg);
@@ -269,5 +277,13 @@ class Controller
 		
 		return $this->CSVView($data, $withheader, $delimiter, $enclosure);
 	}
-	
+
+	private function registerPlugin($smarty)
+	{		
+		if (count($this->smartyPlugin)>0) {
+			foreach($this->smartyPlugin as $plugin) {
+				$smarty->registerPlugin($plugin->modifier, $plugin->name, $plugin->name);
+			}
+		}
+	}
 }
