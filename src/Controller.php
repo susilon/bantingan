@@ -41,10 +41,7 @@ class Controller
 			$this->viewBag = new \StdClass();			
 		}		
 		
-		$this->baseUrl = '//'.$_SERVER['HTTP_HOST'];
-		if (!empty(APPLICATION_SETTINGS["BaseUrl"])) {
-			$this->baseUrl .= '/'.APPLICATION_SETTINGS["BaseUrl"];
-		}
+		$this->baseUrl();
 		
 		$classFunction = array($this,BANTINGAN_ACTION_NAME);			
 		$method = BANTINGAN_ACTION_NAME;	
@@ -222,12 +219,12 @@ class Controller
 		if ($this->namespace != "") {
 			$namespacepath = strtolower($this->namespace)."/";
 		}
-		$newUrl =  $this->baseUrl."/".$namespacepath.BANTINGAN_CONTROLLER_NAME."/".$actionName;
+		$newUrl =  $this->baseUrl()."/".$namespacepath.BANTINGAN_CONTROLLER_NAME."/".$actionName;
 		if (isset($controllerName)) {
 			// override controller name if exists in parameter
-			$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName;
+			$newUrl =  $this->baseUrl()."/".$namespacepath.$controllerName."/".$actionName;
 			if (isset($objectParameter)) {
-				$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName."/".$objectParameter;
+				$newUrl =  $this->baseUrl()."/".$namespacepath.$controllerName."/".$actionName."/".$objectParameter;
 			}
 		}
 		header("Location: ".$newUrl);
