@@ -38,19 +38,6 @@ class Bantingan
 	{	        
 		try {						
 			// session settings
-			if (isset(APPLICATION_SETTINGS["Session_DB"]))
-			{
-				if (APPLICATION_SETTINGS["Session_DB"]) // if true
-				{
-					//$session = new Session(); // session stored in mysql
-                    session_start();
-				} else {
-					session_start();
-				}
-			} else {
-				session_start();
-			}
-		
 			$routeConfig = new AppRouter;
 			$this->route = $routeConfig->RouterStart();	
 			$this->Start($this->route);					
