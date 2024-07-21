@@ -73,12 +73,14 @@ class Model extends \RedBeanPHP\SimpleModel
 
     private function setConnection($selectedDB=null)
     {
-        if (!isset($this->selectedDB))
-        {
+        if ($selectedDB != null) {
+            $this->selectedDB = $selectedDB;
+        } else if ($this->selectedDB == null) {
             $this->selectedDB = "default";
-        }        
-        $this->dbType = DATABASE_SETTINGS[$selectedDB??$this->selectedDB]["type"];        
-        R::selectDatabase($selectedDB??$this->selectedDB);
+        } 
+
+        $this->dbType = DATABASE_SETTINGS[$this->selectedDB]["type"];
+        R::selectDatabase($this->selectedDB);
     }
 
     private function close()
