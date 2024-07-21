@@ -95,7 +95,7 @@ class Bantingan
 			$namespace = isset($this->route["namespace"])?$this->route["namespace"]:"";
 			$namespacepath = "";
 			$namespaceclass = "";
-			define("BANTINGAN_CONTROLLER_NAMESPACE", $namespace);
+			define("BANTINGAN_APP_NAMESPACE", $namespace);
 			if ($namespace != "") {
 				$namespacepath = $namespace."/";
 				$namespaceclass = $namespace."\\";				
