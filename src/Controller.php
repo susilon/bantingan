@@ -130,7 +130,7 @@ class Controller
 
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
 
-		$dompdf->stream($fileName.".pdf", array("Attachment" => false));
+		$dompdf->stream($fileName.".pdf", array("Attachment" => false));		
 	}
 
 	// file pdf download
@@ -154,7 +154,7 @@ class Controller
 
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
 
-		$dompdf->stream($fileName.".pdf", array("Attachment" => true));
+		$dompdf->stream($fileName.".pdf", array("Attachment" => true));		
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Controller
 			echo json_encode($dataJson, $option);		
 		} else {
 			echo json_encode($dataJson);		
-		}		
+		}
 	}
 
 
@@ -228,11 +228,13 @@ class Controller
 			}
 		}
 		header("Location: ".$newUrl);
+		exit;
 	}
 
 	protected function redirectToURL($url)
 	{
 		header("Location: ".$url); 
+		exit;
 	}
 
 	// return as  json
