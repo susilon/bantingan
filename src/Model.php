@@ -52,9 +52,7 @@ class Model extends \RedBeanPHP\SimpleModel
                     } else if ($dbsettings["type"] == "sqlsrv")
                     {                                         
                         R::addDatabase($key,$dbsettings["type"].':Server='.$dbsettings["server"].";Database=".$dbsettings["database"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);                        
-                    } else {
-                        R::addDatabase($key,$dbsettings["type"].':host='.$dbsettings["server"].";dbname=".$dbsettings["database"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);
-                    }
+                    } 
                 } 
             }
                    
