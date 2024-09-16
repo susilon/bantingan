@@ -218,19 +218,54 @@ class Controller
 	// redirect to other action
 	protected function redirectToAction($actionName, $controllerName=null, $objectParameter=null)
 	{
-		$namespacepath = "";
-		if ($this->namespace != "") {
-			$namespacepath = strtolower($this->namespace)."/";
+		$found = false;
+		$pattern = '/(?:^\.?\.?\/)?([a-zA-Z0-9_]+)(?:\/)?$/';
+		
+		if (isset($controllerName) && !empty($controllerName) && !is_null($controllerName)) {			
+			preg_match($pattern, $controllerName, $matches);
+			if (!empty($matches)) {
+				$controllerName = $matches[1];
+
+				if (ROUTE_SETTINGS != null && count(ROUTE_SETTINGS) > 0)  {
+					$newPattern = '/\/' . preg_quote($controllerName, '/') . '\/?$/'; 
+
+					$result = [];
+
+					foreach (ROUTE_SETTINGS as $key => $value) {
+						if (preg_match($newPattern, $value['path'])) {
+							$result[] = $value;
+							break;
+						}
+					}
+
+					if (count($result) > 0) { 
+						$found = true;
+						$route = $result[0];
+						if (isset($route["namespace"]) && !empty($route["namespace"])) {
+							$namespacepath = $route["namespace"];
+						}
+					}
+				}
+			}
 		}
-		$newUrl =  $this->baseUrl."/".$namespacepath.BANTINGAN_CONTROLLER_NAME."/".$actionName;
+		
+		if (!$found) {
+			$namespacepath = "";
+			if ($this->namespace != "") {
+				$namespacepath = strtolower($this->namespace)."/";
+			}
+		}
+
+		$newUrl =  $this->baseUrl()."/".$namespacepath.BANTINGAN_CONTROLLER_NAME."/".$actionName;
 		if (isset($controllerName)) {
 			// override controller name if exists in parameter
-			$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName;
+			$newUrl =  $this->baseUrl()."/".$namespacepath.$controllerName."/".$actionName;
 			if (isset($objectParameter)) {
-				$newUrl =  $this->baseUrl."/".$namespacepath.$controllerName."/".$actionName."/".$objectParameter;
+				$newUrl =  $this->baseUrl()."/".$namespacepath.$controllerName."/".$actionName."/".$objectParameter;
 			}
 		}
 		header("Location: ".$newUrl);
+		exit;
 	}
 
 	protected function redirectToURL($url)
