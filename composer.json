@@ -1,7 +1,7 @@
 {
     "name": "susilon/bantingan",
     "description": "Bantingan MVC framework V3, with PHP8 support",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "library",
     "license": "MIT",
     "autoload": {
