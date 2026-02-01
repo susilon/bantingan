@@ -307,7 +307,9 @@ class Model extends \RedBeanPHP\SimpleModel
 
     private function getRowWithId($id) { 
         if (isset($this->tablename)) {
-            return R::getRow("select * from $this->tablename where id = ?", [ $id ]);
+            // Validate table name to prevent SQL injection
+            $tablename = preg_replace('/[^a-zA-Z0-9_]/', '', $this->tablename);
+            return R::getRow("select * from $tablename where id = ?", [ $id ]);
         }           
         throw new \Exception('Cannot load data, table name is unknown.', 50);       
     }

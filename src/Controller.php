@@ -45,9 +45,6 @@ class Controller
 		if (!empty(APPLICATION_SETTINGS["BaseUrl"])) {
 			$this->baseUrl .= '/'.APPLICATION_SETTINGS["BaseUrl"];
 		}
-		
-		$classFunction = array($this,BANTINGAN_ACTION_NAME);			
-		$method = BANTINGAN_ACTION_NAME;	
 
 		if (!method_exists($this, BANTINGAN_ACTION_NAME)) {			
 			throw new \Exception('Method does not exists', 404);			
@@ -112,11 +109,11 @@ class Controller
 		return $this;		
 	}
 
-	// stream pdf
-	protected function dompdfView($viewPathArg = null)
-	{		
+	// Helper method to generate PDF from HTML
+	private function generatePdf($viewPathArg = null)
+	{
 		$html = $this->page($viewPathArg);
-			
+		
 		// instantiate and use the dompdf class
 		$dompdf = new \Dompdf\Dompdf();
 		$dompdf->load_html($html);
@@ -132,31 +129,21 @@ class Controller
 		$dompdf = $this->dompdfInjectPageCount($dompdf);
 
 		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
+		
+		return [$dompdf, $fileName];
+	}
 
+	// stream pdf
+	protected function dompdfView($viewPathArg = null)
+	{		
+		list($dompdf, $fileName) = $this->generatePdf($viewPathArg);
 		$dompdf->stream($fileName.".pdf", array("Attachment" => false));
 	}
 
 	// file pdf download
 	protected function dompdfFile($viewPathArg = null)
 	{		
-		$html = $this->page($viewPathArg);
-			
-		// instantiate and use the dompdf class
-		$dompdf = new \Dompdf\Dompdf();
-		$dompdf->load_html($html);
-		$dompdf->set_paper($this->paperSize??'A4', $this->pageOrientation??'Portrait');
-		
-		$options = $dompdf->getOptions();
-		$options->setIsRemoteEnabled(true);
-		$options->setIsPhpEnabled(true); 
-		$dompdf->setOptions($options);  
-
-		$dompdf->render();
-
-		$dompdf = $this->dompdfInjectPageCount($dompdf);
-
-		$fileName = $this->fileName?$this->fileName:BANTINGAN_ACTION_NAME;
-
+		list($dompdf, $fileName) = $this->generatePdf($viewPathArg);
 		$dompdf->stream($fileName.".pdf", array("Attachment" => true));
 	}
 
@@ -271,6 +258,7 @@ class Controller
 	protected function redirectToURL($url)
 	{
 		header("Location: ".$url); 
+		exit;
 	}
 
 	// return as  json
@@ -292,7 +280,7 @@ class Controller
 	{
 		$file = fopen('php://output', 'w');
 		
-		if ($withheader) {
+		if ($withheader && !empty($data) && isset($data[0])) {
 			$keys = array_keys($data[0]);
 			fputcsv($file, $keys);
 		}

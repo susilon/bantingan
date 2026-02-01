@@ -31,7 +31,7 @@ class Settings
     private static function envVariableMapping($oldvalue, $newvalue) {
         if (is_array($oldvalue)) {
             foreach ($oldvalue as $key => $value) {
-                $oldvalue[$key] = envVariableMapping($value, $newvalue[$key]??$value);
+                $oldvalue[$key] = self::envVariableMapping($value, $newvalue[$key]??$value);
             }	
         } else {
             $oldvalue = $newvalue;
@@ -96,7 +96,8 @@ class Settings
         // load default language
         $defaultlanguage = APPLICATION_SETTINGS["Language"]??null;        
         if (isset($_GET["l"])) {	
-            $defaultlanguage = $_GET["l"];	// override language from querystring l
+            // Sanitize language parameter to prevent path traversal
+            $defaultlanguage = preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET["l"]);	// override language from querystring l
         }
         if ($defaultlanguage != null) {
             if(file_exists($path['dirname']."/language/".$defaultlanguage.'.php')) {	 
