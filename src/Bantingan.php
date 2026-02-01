@@ -38,6 +38,12 @@ class Bantingan
 	{	        
 		try {						
 			// session settings
+			// DB session handler can be implemented here if needed
+			// For now, using standard PHP sessions
+			if (session_status() === PHP_SESSION_NONE) {
+				session_start();
+			}
+		
 			$routeConfig = new AppRouter;
 			$this->route = $routeConfig->RouterStart();	
 			$this->Start($this->route);					
@@ -101,10 +107,10 @@ class Bantingan
 				$namespaceclass = $namespace."\\";				
 			}
 
-			$controllerFile = APPLICATION_BASEPATH . '/' .			
-				APPLICATION_SETTINGS["Controllers"].'/'.
-				$namespacepath.
-				ucfirst(BANTINGAN_CONTROLLER_NAME).'Controller.php';	
+		$controllerFile = APPLICATION_BASEPATH . '/' .			
+			APPLICATION_SETTINGS["Controllers"].'/'.
+			$namespacepath.
+			ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME)).'Controller.php';
 			
 			if(file_exists($controllerFile)) {	 				
 				// requested controller file	
@@ -179,10 +185,10 @@ class Bantingan
 				$errorPage->Render($controllerName.$methodName);
 			}
 			catch (\Throwable $err) { 
-				echo "Sorry, resources not found!<br>".$errorException->getMessage();
+				echo "Sorry, resources not found!<br>".htmlspecialchars($errorException->getMessage());
 			}
-			catch(\Exception $err) {          	
-				echo "Sorry, resources not found!<br>".$errorException->getMessage();
+			catch(\Exception $err) {	          	
+				echo "Sorry, resources not found!<br>".htmlspecialchars($errorException->getMessage());
 			}
 		} 
 
