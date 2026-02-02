@@ -74,68 +74,68 @@ sample route.config
   },
   
 */
+
   		// Route Configuration
-	if (ROUTE_SETTINGS != null && count(ROUTE_SETTINGS) > 0) {
-		foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
-			if (isset($routevalue["path"])) {
-				$path = $routevalue["path"];
-				$namespace = $routevalue["namespace"]??"";
-				
-				$controller = "home";
-				if (isset($routevalue["controller"])) {
-					// path with predefined action
-					$controller = $routevalue["controller"]; // set predefined action
-				} else {
-					$path .= "/{controller}"; // any action by url
-				}
-
-				$action = "index";
-				if (isset($routevalue["action"])) {
-					// path with predefined action
-					$action = $routevalue["action"]; // set predefined action
-				} else {
-					$path .= "/{action}"; // any action by url
-				}
-
-				$parameters = null;
-				if (isset($routevalue["parameter"])) {
-					// path with predefined parameter
-					if (!isset($routevalue["action"])) {
-						exit('Action parameter not set at route '.$key);
+		if (defined('ROUTE_SETTINGS') && ROUTE_SETTINGS !== null && count(ROUTE_SETTINGS) > 0) {						
+			foreach (ROUTE_SETTINGS as $key => $routevalue) {    		
+				if (isset($routevalue["path"])) {
+					$path = $routevalue["path"];
+					$namespace = $routevalue["namespace"]??"";
+					
+					$controller = "home";
+					if (isset($routevalue["controller"])) {
+						// path with predefined action
+						$controller = $routevalue["controller"]; // set predefined action
+					} else {
+						$path .= "/{controller}"; // any action by url
 					}
-					$parameters = implode("/", $routevalue["parameter"]);					
-				} else {
-					if (isset($routevalue["wildcard"]) && $routevalue["wildcard"] == true) {
-						// enable wildcard parameters
-						$path .= "/{parameters}";
+
+					$action = "index";
+					if (isset($routevalue["action"])) {
+						// path with predefined action
+						$action = $routevalue["action"]; // set predefined action
+					} else {
+						$path .= "/{action}"; // any action by url
 					}
-				}
 
-				$routes->add($key, new Route($path,// path with any parameter
-					array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters),
-					array('parameters'=>'.*') // requirements
-				));
+					$parameters = null;
+					if (isset($routevalue["parameter"])) {
+						// path with predefined parameter
+						if (!isset($routevalue["action"])) {
+							exit('Action parameter not set at route '.$key);
+						}
+						$parameters = implode("/", $routevalue["parameter"]);					
+					} else {
+						if (isset($routevalue["wildcard"]) && $routevalue["wildcard"] == true) {
+							// enable wildcard parameters
+							$path .= "/{parameters}";
+						}
+					}
 
-				if ($namespace != "") {
-					$routes->add($key."_base", new Route("/".strtolower($namespace)."/",
-						array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
+					$routes->add($key, new Route($path,// path with any parameter
+						array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters),
+						array('parameters'=>'.*') // requirements
 					));
 
-					$routes->add($key."_method", new Route("/".strtolower($namespace)."/{controller}/",
-						array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
-					));
-				}
+					if ($namespace != "") {
+						$routes->add($key."_base", new Route("/".strtolower($namespace)."/",
+							array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
+						));
 
-				/*
-				$routes->add($key, new Route($path,// path with any parameter
-					array('controller' => $routevalue["controller"], 'action' => $action, 'parameters' => $parameters),
-					array('parameters'=>'.*') // requirements
-				));
-				*/
+						$routes->add($key."_method", new Route("/".strtolower($namespace)."/{controller}/",
+							array('namespace' => $namespace,'controller' => $controller, 'action' => $action, 'parameters' => $parameters)
+						));
+					}
+
+					/*
+					$routes->add($key, new Route($path,// path with any parameter
+						array('controller' => $routevalue["controller"], 'action' => $action, 'parameters' => $parameters),
+						array('parameters'=>'.*') // requirements
+					));
+					*/
+				}
 			}
 		}
-	}
-		
 	
 		$routes->add('default', new Route('/{controller}/{action}/{parameters}',// path
 		    //array('controller' => 'home', 'action' => 'index', 'parameters' => null), // default values	
@@ -146,7 +146,7 @@ sample route.config
 		$routes->add('method', new Route('/{controller}/',// path
 		    //array('controller' => 'home', 'action' => 'index', 'parameters' => null) // default values		
 				array('controller' => strtolower(APPLICATION_SETTINGS["DefaultController"]), 'action' => 'index', 'parameters' => null) // default values		
-		));		
+		));
 
 		$routes->add('home', new Route('/',// path
 		    //array('controller' => 'home', 'action' => 'index', 'parameters' => null) // default values		

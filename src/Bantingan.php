@@ -105,9 +105,9 @@ class Bantingan
 			if ($namespace != "") {
 				$namespacepath = $namespace."/";
 				$namespaceclass = $namespace."\\";				
-			}
+			}			
 
-		$controllerFile = APPLICATION_BASEPATH . '/' .			
+			$controllerFile = APPLICATION_BASEPATH . '/' .			
 			APPLICATION_SETTINGS["Controllers"].'/'.
 			$namespacepath.
 			ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME)).'Controller.php';
@@ -116,7 +116,7 @@ class Bantingan
 				// requested controller file	
 				$controllerFunction = ucfirst(CONTROLLER_NAMESPACE)."\\".
 					$namespaceclass.
-					ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME))."Controller";
+					ucfirst(strtolower(BANTINGAN_CONTROLLER_NAME))."Controller";					
 				
 				$controller = new $controllerFunction();
 				$controller->namespace = $namespace;
@@ -185,10 +185,10 @@ class Bantingan
 				$errorPage->Render($controllerName.$methodName);
 			}
 			catch (\Throwable $err) { 
-				echo "Sorry, resources not found!<br>".htmlspecialchars($errorException->getMessage());
+				echo "Sorry, resources not found!<br>- ".htmlspecialchars($err->getMessage());
 			}
 			catch(\Exception $err) {	          	
-				echo "Sorry, resources not found!<br>".htmlspecialchars($errorException->getMessage());
+				echo "Sorry, resources not found!<br>- ".htmlspecialchars($err->getMessage());
 			}
 		} 
 

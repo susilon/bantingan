@@ -70,7 +70,7 @@ class Settings
             }
 
             foreach ($webconfig as $key => $settings) {
-                if ($key == 'load_settings' ) {
+                if ($key == 'load_settings' && $settings != null && count($settings) > 0) {
                     foreach ($settings as $settingsname => $settingsfile) {
                         $settingscontent = @file_get_contents($path['dirname']."/".$settingsfile);	
                         if ($settingscontent === FALSE) {
@@ -91,22 +91,6 @@ class Settings
             }		
         } catch (ParseException $exception) {    
             exit('Unable to parse the config file: '.$exception->getMessage());
-        }
-
-        // load default language
-        $defaultlanguage = APPLICATION_SETTINGS["Language"]??null;        
-        if (isset($_GET["l"])) {	
-            // Sanitize language parameter to prevent path traversal
-            $defaultlanguage = preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET["l"]);	// override language from querystring l
-        }
-        if ($defaultlanguage != null) {
-            if(file_exists($path['dirname']."/language/".$defaultlanguage.'.php')) {	 
-                // load language file	
-                require $path['dirname']."/language/".$defaultlanguage.'.php';
-            } else {
-                // back to default
-                require $path['dirname']."/language/".APPLICATION_SETTINGS["Language"].'.php';
-            }
         }
         
         // set session gc
