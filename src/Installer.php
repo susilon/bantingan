@@ -9,8 +9,10 @@ namespace Bantingan;
 
     Bantingan Framework is free, open source, and GPL friendly. You can use it for commercial projects, open source projects, or really almost whatever you want.   
 
-    This application is provided to you “as is” without warranty of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability, fitness for a particular purpose or non-infringement.
+    This application is provided to you "as is" without warranty of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability, fitness for a particular purpose or non-infringement.
 */
+
+use Composer\Script\Event;
 
 class Installer
 {
