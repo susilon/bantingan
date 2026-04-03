@@ -22,7 +22,7 @@
         "smarty/smarty": "^5.8.0",
         "gabordemooij/redbean": "dev-master",
         "dompdf/dompdf": "^3.1.5",
-        "phpoffice/phpspreadsheet": "^5.50",
+        "phpoffice/phpspreadsheet": "^5.5.0",
         "phpmailer/phpmailer": "^7.0.2",
         "gregwar/captcha": "^1.2",
         "symfony/yaml": "^5.2"
