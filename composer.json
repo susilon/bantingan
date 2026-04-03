@@ -19,7 +19,7 @@
     "require": {
         "php": "^8.0",
         "symfony/routing": "^5.2",
-        "smarty/smarty": "^5.8.0",
+        "smarty/smarty": "^4.2",
         "gabordemooij/redbean": "dev-master",
         "dompdf/dompdf": "^3.1.5",
         "phpoffice/phpspreadsheet": "^5.5.0",
