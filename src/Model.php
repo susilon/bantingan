@@ -372,4 +372,41 @@ class Model extends \RedBeanPHP\SimpleModel
         }
         return $changedcolumn;
     }
+
+    private function ensureConnection()
+    {
+        try {
+            $this->setConnection();
+            \RedBeanPHP\R::getCell("SELECT 1");
+        } catch (\Exception $e) {
+            $this->reconnect();
+        }
+    }
+
+    private function reconnect()
+    {
+        try {
+            \RedBeanPHP\R::close();
+        } catch (\Exception $e) {}
+
+        \RedBeanPHP\R::$toolboxes = [];
+        unset($GLOBALS['redbeans']);
+
+        $dbfreeze = REDBEANPHP_FREEZE ?? false;
+
+        foreach (DATABASE_SETTINGS as $key => $dbsettings) {
+            if ($dbsettings["type"] == "sqlite") {
+                \RedBeanPHP\R::addDatabase($key,$dbsettings["type"].':'.$dbsettings["server"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);
+            } else if ($dbsettings["type"] == "postgresql" || $dbsettings["type"] == "mysql") {
+                \RedBeanPHP\R::addDatabase($key,$dbsettings["type"].':host='.$dbsettings["server"].";dbname=".$dbsettings["database"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);
+            } else if ($dbsettings["type"] == "sqlsrv") {
+                \RedBeanPHP\R::addDatabase($key,$dbsettings["type"].':Server='.$dbsettings["server"].";Database=".$dbsettings["database"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);
+            } else {
+                \RedBeanPHP\R::addDatabase($key,$dbsettings["type"].':host='.$dbsettings["server"].";dbname=".$dbsettings["database"],$dbsettings["user"],$dbsettings["password"],$dbfreeze);
+            }
+        }
+
+        $GLOBALS['redbeans'] = true;
+        $this->setConnection();
+    }
 }
