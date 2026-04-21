@@ -14,12 +14,11 @@ use Composer\Util\Filesystem;
     This application is provided to you "as is" without warranty of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability, fitness for a particular purpose or non-infringement.
 */
 
-use Composer\Script\Event;
-
 class Installer
 {
     public static function postInstall(Event $event)
     {
+        echo 'test';
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
         $baseDir = dirname($vendorDir);
         
