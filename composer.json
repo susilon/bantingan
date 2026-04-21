@@ -27,7 +27,12 @@
         "gregwar/captcha": "^1.2",
         "symfony/yaml": "^5.2"
     },
-    "post-update-cmd": [
-        "Bantingan\\Installer::postInstall"
-    ]
+    "scripts": {
+        "post-install-cmd": [
+            "Susilon\\Bantingan\\Installer::postInstall"
+        ],
+        "post-update-cmd": [
+            "Susilon\\Bantingan\\Installer::postUpdate"
+        ]
+    }
 }
