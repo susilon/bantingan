@@ -1,5 +1,5 @@
 <?php
-namespace Susilon\Bantingan;
+namespace Bantingan;
 use Composer\Script\Event;
 use Composer\Util\Filesystem;
 /*      
