@@ -1,5 +1,7 @@
 <?php
-namespace Bantingan;
+namespace Susilon\Bantingan;
+use Composer\Script\Event;
+use Composer\Util\Filesystem;
 /*      
     This is the application installer
 
@@ -16,21 +18,37 @@ class Installer
 {
     public static function postInstall(Event $event)
     {
-        // creating directories
-        $directories = [
-            __DIR__."app",
-            __DIR__."assets",
-            __DIR__."config",
-            __DIR__."modules",
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $baseDir = dirname($vendorDir);
+        
+        $filesystem = new Filesystem();
+        
+        $dirs = [
+            $baseDir . '/app',
+            $baseDir . '/app/Controllers',
+            $baseDir . '/app/Models',
+            $baseDir . '/app/Views',
+            $baseDir . '/public',
+            $baseDir . '/config',
+            $baseDir . '/modules',
+            $baseDir . '/templates_c',
         ];
-
-        foreach($directories as $dir) {
-            if (!is_dir($dir)) {
-                $old = umask(0);
-                mkdir($dir, 0775, true);
-                umask($old);
+        
+        foreach ($dirs as $dir) {
+            if (!$filesystem->isDirectory($dir)) {
+                $filesystem->ensureDirectoryExists($dir);
             }
         }
         
+        // Copy config file example
+        //copy(
+        //    $vendorDir . '/susilon/bantingan/config.example.php',
+        //    $baseDir . '/config/bantingan.php'
+        //);        
+    }
+
+    public static function postUpdate(Event $event)
+    {
+        self::postInstall($event);
     }
 }
